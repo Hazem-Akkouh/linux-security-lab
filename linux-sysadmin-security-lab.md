@@ -1,7 +1,7 @@
 # Linux System Administration & Web Server Security Lab
 
 **Author:** *Hazem Akkouh*
-**Environment:** Debian/Ubuntu VM (target `192.168.159.130`), SSH remote access
+**Environment:** Debian/Ubuntu VM (target `192.168.159.111`), SSH remote access
 **Scope:** SSH hardening, user/privilege management, Apache + WordPress + MariaDB deployment, and blue-team indicators of privilege escalation
 
 ---
@@ -279,7 +279,7 @@ sudo chsh root
 # set to: /usr/sbin/nologin
 ```
 
-> ⚠️ **Recovery note:** if `/usr/sbin/nologin` locks you out of `su root` entirely and you need it back, edit `/etc/passwd` directly and change root's shell field back to `/bin/bash`:
+> **Recovery note:** if `/usr/sbin/nologin` locks you out of `su root` entirely and you need it back, edit `/etc/passwd` directly and change root's shell field back to `/bin/bash`:
 > ```bash
 > sudo vim /etc/passwd
 > ```
