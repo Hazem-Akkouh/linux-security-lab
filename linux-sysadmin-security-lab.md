@@ -1,6 +1,6 @@
 # Linux System Administration & Web Server Security Lab
 
-**Author:** *(add your name)*
+**Author:** *Hazem Akkouh*
 **Environment:** Debian/Ubuntu VM (target `192.168.159.130`), SSH remote access
 **Scope:** SSH hardening, user/privilege management, Apache + WordPress + MariaDB deployment, and blue-team indicators of privilege escalation
 
