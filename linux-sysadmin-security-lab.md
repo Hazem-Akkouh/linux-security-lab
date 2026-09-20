@@ -9,19 +9,19 @@
 ## Table of Contents
 
 1. [Overview](#overview)
-2. [Part 1 — SSH Setup & Remote Access](#part-1--ssh-setup--remote-access)
-3. [Part 2 — User & Sudo Privilege Management](#part-2--user--sudo-privilege-management)
-4. [Part 3 — Safe User Renaming](#part-3--safe-user-renaming)
-5. [Part 4 — Vim Recovery Tricks (Editing Root-Owned Files)](#part-4--vim-recovery-tricks-editing-root-owned-files)
-6. [Part 5 — Auditing Users & Sudo Access](#part-5--auditing-users--sudo-access)
-7. [Part 6 — Safely Removing a Logged-In User](#part-6--safely-removing-a-logged-in-user)
-8. [Part 7 — Shell Quality-of-Life (Autocomplete)](#part-7--shell-quality-of-life-autocomplete)
-9. [Part 8 — Filesystem Hierarchy Review](#part-8--filesystem-hierarchy-review)
-10. [Part 9 — SSH Key-Based Authentication](#part-9--ssh-key-based-authentication)
-11. [Part 10 — Locking Down the Root Account](#part-10--locking-down-the-root-account)
-12. [Part 11 — Apache2 + WordPress + MariaDB Deployment](#part-11--apache2--wordpress--mariadb-deployment)
-13. [Part 12 — Configuration Files Reference](#part-12--configuration-files-reference)
-14. [Part 13 — Blue Team Notes: Privilege Escalation & Persistence Indicators](#part-13--blue-team-notes-privilege-escalation--persistence-indicators)
+2. [Part 1 :SSH Setup & Remote Access](#part-1--ssh-setup--remote-access)
+3. [Part 2 :User & Sudo Privilege Management](#part-2--user--sudo-privilege-management)
+4. [Part 3 :Safe User Renaming](#part-3--safe-user-renaming)
+5. [Part 4 :Vim Recovery Tricks (Editing Root-Owned Files)](#part-4--vim-recovery-tricks-editing-root-owned-files)
+6. [Part 5 :Auditing Users & Sudo Access](#part-5--auditing-users--sudo-access)
+7. [Part 6 :Safely Removing a Logged-In User](#part-6--safely-removing-a-logged-in-user)
+8. [Part 7 :Shell Quality-of-Life (Autocomplete)](#part-7--shell-quality-of-life-autocomplete)
+9. [Part 8 :Filesystem Hierarchy Review](#part-8--filesystem-hierarchy-review)
+10. [Part 9 :SSH Key-Based Authentication](#part-9--ssh-key-based-authentication)
+11. [Part 10 :Locking Down the Root Account](#part-10--locking-down-the-root-account)
+12. [Part 11 :Apache2 + WordPress + MariaDB Deployment](#part-11--apache2--wordpress--mariadb-deployment)
+13. [Part 12 :Configuration Files Reference](#part-12--configuration-files-reference)
+14. [Part 13 :Blue Team Notes: Privilege Escalation & Persistence Indicators](#part-13--blue-team-notes-privilege-escalation--persistence-indicators)
 15. [Lessons Learned](#lessons-learned)
 
 ---
@@ -34,7 +34,7 @@ The goal was not just to get things "working," but to understand **why** each co
 
 ---
 
-## Part 1 — SSH Setup & Remote Access
+## Part 1 :SSH Setup & Remote Access
 
 Initial reconnaissance and enabling SSH access on the target machine.
 
@@ -57,15 +57,15 @@ Connecting from the attacking/admin machine and basic recon on the target:
 ssh user@192.168.159.130
 whoami
 cat /etc/passwd    # Enumerate all system accounts
-cat /etc/shadow    # Requires root — view password hashes
+cat /etc/shadow    # Requires root :view password hashes
 useradd -m -s /bin/bash dev   # Create a new user 'dev' with a home dir and bash shell
 ```
 
-**Security takeaway:** exposing SSH means the attack surface grows immediately — firewall rules, key-based auth, and disabling root login (covered later) are essential follow-ups, not optional extras.
+**Security takeaway:** exposing SSH means the attack surface grows immediately :firewall rules, key-based auth, and disabling root login (covered later) are essential follow-ups, not optional extras.
 
 ---
 
-## Part 2 — User & Sudo Privilege Management
+## Part 2 :User & Sudo Privilege Management
 
 Before renaming or deleting accounts, always create a **temporary sudo-capable user** so you never lock yourself out.
 
@@ -77,7 +77,7 @@ sudo usermod -aG sudo bob
 
 ---
 
-## Part 3 — Safe User Renaming
+## Part 3 :Safe User Renaming
 
 Renaming a user (`user` → `admin`) without breaking ownership of the home directory or primary group.
 
@@ -98,11 +98,11 @@ ls /home
 
 ---
 
-## Part 4 — Vim Recovery Tricks (Editing Root-Owned Files)
+## Part 4 :Vim Recovery Tricks (Editing Root-Owned Files)
 
 A common gotcha: opening a root-owned config file in Vim **without** `sudo`, then being unable to save.
 
-**Solution 1 — reopen with sudo (simplest):**
+**Solution 1 :reopen with sudo (simplest):**
 ```
 Esc
 :q!
@@ -111,7 +111,7 @@ Esc
 :wq
 ```
 
-**Solution 2 — save in place without exiting (advanced):**
+**Solution 2 :save in place without exiting (advanced):**
 ```
 Esc
 :w !sudo tee %
@@ -121,7 +121,7 @@ Esc
 
 ---
 
-## Part 5 — Auditing Users & Sudo Access
+## Part 5 :Auditing Users & Sudo Access
 
 A checklist used to review who has elevated privileges on the box.
 
@@ -172,7 +172,7 @@ ss -tulpn | grep ssh       # confirm SSH service state
 
 ---
 
-## Part 6 — Safely Removing a Logged-In User
+## Part 6 :Safely Removing a Logged-In User
 
 Deleting an account that may still have active processes/sessions requires care to avoid orphaned processes or file-permission issues.
 
@@ -195,7 +195,7 @@ sudo delgroup bob
 
 ---
 
-## Part 7 — Shell Quality-of-Life (Autocomplete)
+## Part 7 :Shell Quality-of-Life (Autocomplete)
 
 Not security-critical, but useful for working efficiently at the CLI.
 
@@ -209,7 +209,7 @@ sudo apt install fzf -y     # optional: fuzzy history/command search
 
 ---
 
-## Part 8 — Filesystem Hierarchy Review
+## Part 8 :Filesystem Hierarchy Review
 
 Reviewing what lives under the standard Linux directory tree, and checking sizes/permissions as a sanity check.
 
@@ -224,7 +224,7 @@ ls -l  /bin /etc /usr /var /home /root   # permission review
 
 ---
 
-## Part 9 — SSH Key-Based Authentication
+## Part 9 :SSH Key-Based Authentication
 
 Moving from password auth to key-based auth for the `dev` account.
 
@@ -255,14 +255,14 @@ exit   # close SSH session
 
 ---
 
-## Part 10 — Locking Down the Root Account
+## Part 10 :Locking Down the Root Account
 
 Steps taken to prevent direct/interactive root logins while keeping the account itself intact for ownership purposes.
 
 ```bash
 su root
 cd ~
-vim /etc/sudoers        # inspection only — NOT the recommended edit method
+vim /etc/sudoers        # inspection only :NOT the recommended edit method
 visudo                  # correct, syntax-safe way to edit sudoers
 
 groups dev
@@ -286,11 +286,11 @@ sudo chsh root
 
 ---
 
-## Part 11 — Apache2 + WordPress + MariaDB Deployment
+## Part 11 :Apache2 + WordPress + MariaDB Deployment
 
 ### 11.1 Connectivity & user context
 ```bash
-ssh root@192.168.159.130   # denied — root SSH disabled, as intended
+ssh root@192.168.159.130   # denied :root SSH disabled, as intended
 ssh dev@192.168.159.130    # normal login path
 
 su admin                   # switch to a more privileged account
@@ -374,7 +374,7 @@ systemctl reboot -i           # force reboot, ignoring active-session warnings
 
 ---
 
-## Part 12 — Configuration Files Reference
+## Part 12 :Configuration Files Reference
 
 | File | Edited With | Purpose | Security Impact |
 |---|---|---|---|
@@ -384,7 +384,7 @@ systemctl reboot -i           # force reboot, ignoring active-session warnings
 | `/etc/apache2/.htpasswd` | `htpasswd` | Encrypted credential store | Apache checks this before granting access via Basic Auth |
 | `/etc/wordpress/config-<ip>.php` | `nano` | WordPress DB connection | Wrong/weak credentials here = DB compromise risk or "Error establishing a database connection" |
 | `/etc/apache2/conf-available/security.conf` | `nano` | Server hardening (`ServerSignature Off`, `ServerTokens Prod`) | Hides Apache/OS version, reducing recon value for attackers |
-| `/var/www/html/info.php`, `testdb.php` | `nano` | Temporary PHP/DB test scripts | **Must be deleted after testing** — they leak PHP config and DB details |
+| `/var/www/html/info.php`, `testdb.php` | `nano` | Temporary PHP/DB test scripts | **Must be deleted after testing** :they leak PHP config and DB details |
 | `/etc/sudoers` | `visudo` **only** | Controls who can run privileged commands | Misconfiguration can either lock out admins or grant unintended root access |
 
 **Request flow, end to end:**
@@ -398,9 +398,9 @@ systemctl reboot -i           # force reboot, ignoring active-session warnings
 
 ---
 
-## Part 13 — Blue Team Notes: Privilege Escalation & Persistence Indicators
+## Part 13 :Blue Team Notes: Privilege Escalation & Persistence Indicators
 
-The final part of this lab flips perspective from *builder* to *defender* — recognizing the command patterns and file changes that typically show up during a Linux compromise, so they can be mapped to detection rules (e.g. `auditd`, EDR, SIEM correlation).
+The final part of this lab flips perspective from *builder* to *defender* :recognizing the command patterns and file changes that typically show up during a Linux compromise, so they can be mapped to detection rules (e.g. `auditd`, EDR, SIEM correlation).
 
 ### Categories of suspicious activity to monitor
 
@@ -454,11 +454,11 @@ This event-based view is more resilient than string-matching specific commands, 
 
 ## Lessons Learned
 
-- **Never edit `/etc/sudoers` directly** — always use `visudo` to avoid a syntax error locking every admin out.
+- **Never edit `/etc/sudoers` directly** :always use `visudo` to avoid a syntax error locking every admin out.
 - **Always create a fallback sudo user** before renaming or deleting the account you're currently using.
 - **Reboot before deleting a logged-in user** to guarantee no orphaned processes are left holding file handles.
-- Apache's behavior is only as secure as its **weakest applied config layer** — `DocumentRoot`, global `<Directory>` rules, and `.htaccess` all have to align, or protections silently don't apply.
-- **Delete test/debug files** (`info.php`, `testdb.php`) immediately after use — they're a common source of accidental information disclosure.
+- Apache's behavior is only as secure as its **weakest applied config layer** :`DocumentRoot`, global `<Directory>` rules, and `.htaccess` all have to align, or protections silently don't apply.
+- **Delete test/debug files** (`info.php`, `testdb.php`) immediately after use :they're a common source of accidental information disclosure.
 - Defense is stronger when built around **event types** (`execve`, `setuid`, file writes) rather than a static list of "bad commands," since the latter is trivial to evade.
 
 ---
