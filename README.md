@@ -47,7 +47,7 @@ The lab follows the full lifecycle of a server: preparing it for remote access, 
 
 The complete write-up, with every command and explanation, is here:
 
-👉 **[Read the full lab report](./LAB_REPORT.md)**
+👉 **[Read the full lab report](./linux-sysadmin-security-lab.md)**
 
 ---
 
